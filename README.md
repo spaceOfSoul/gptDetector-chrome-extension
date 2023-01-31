@@ -1,0 +1,1 @@
+openAI에서 제공하는 gpt-2 detector model을 활용한 extension입니다.
