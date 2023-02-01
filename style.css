@@ -14,3 +14,17 @@
     background-color: #4F98FF;
     color: #111;
 }
+
+.footnote {
+    float: footnote;
+    font-size: 5px;
+    color: rgba(0, 0, 0, 0.8);
+    margin-bottom: 2mm;
+}
+
+#textFiled {
+    line-height: 1.6;
+    text-align: top;
+    width: 200px;
+    height: 100px;
+}

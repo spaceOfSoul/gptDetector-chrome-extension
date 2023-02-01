@@ -7,8 +7,10 @@
 <body>
     <h1>GPT Detector</h1>
     <h2>Checks if this text was written by AI.</h2>
-    <input type="text" id="textFiled">
-    <button id="inspect-button">inspect</button>
+    <p>Paste the article you want to analyze into the textbox below.</p>
+    <input type="textbox" id="textFiled">
+    <p>Or click on the article.</p>
+    <hr>
     <p>Percentage Written by AI.</p>
     <div class="progress-field">
         <div class="fill-bar"></div>
@@ -16,6 +18,9 @@
     <p id="percentage">50%</p>
     <p id="message"></p>
     <script src="app.js"></script>
+    <div class="footnote">
+        <span>The program was created using openAI gpt2 detection model.</span>
+    </div>
 </body>
 
 </html>

@@ -5,5 +5,13 @@
     "version": "1.0",
     "action": {
         "default_popup": "index.html"
-    }
+    },
+    "content_scripts": [{
+        "matches": ["<all_urls>"],
+        "js": ["content_script.js"]
+    }],
+
+    "permissions": [
+        "activeTab"
+    ]
 }
