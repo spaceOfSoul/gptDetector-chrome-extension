@@ -1,11 +1,12 @@
 const textbox = document.querySelector('#textFiled');
-const last_submit = null;
+let last_submit = null;
 
 const bar = document.querySelector('.fill-bar');
 const message = document.querySelector('#message');
 const percentage_txt = document.querySelector('#percentage');
 
 const a_start = new Event('a_start');
+const openButton = document.querySelector('#window-open');
 
 function update_graph(result) {
     if (result === null) {
@@ -19,7 +20,7 @@ function update_graph(result) {
         if (fake_probability * 100 > 50) {
             message.innerText = "It is highly likely that the article was written by AI.";
         } else {
-            message.innerText = "It is unlikely that it was written by AI."
+            message.innerText = "It is unlikely that it was written by AI.";
         }
     }
 }
@@ -33,13 +34,12 @@ textbox.oninput = () => {
         return;
     }
     last_submit = setTimeout(() => {
-        let req = new XMLHttpRequest();
         if (textbox.value.length === 0) {
             update_graph(null);
             return;
         }
         //서버에 리퀘스트
-        dispatchEvent(req, a_start);
+        analysisRequest(textbox.value);
     }, 1000);
 
 };
@@ -49,12 +49,14 @@ window.addEventListener('DOMContentLoaded', () => {
     textbox.focus();
 });
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    textbox.value = request;
-    let req = new XMLHttpRequest();
-    dispatchEvent(req, a_start);
+    console.log(request);
+    if (request.preText === null) return;
+    textbox.value = request.preText;
+    analysisRequest(textbox.value);
 });
 
-function analysisRequest(req, txt) {
+function analysisRequest(txt) {
+    const req = new XMLHttpRequest();
     req.open('GET', "https://openai-openai-detector.hf.space" + '/?' + txt, true);
     req.onreadystatechange = () => {
         if (req.readyState !== 4) return;
@@ -66,7 +68,11 @@ function analysisRequest(req, txt) {
     req.send();
 }
 
-document.addEventListener('a_start', () => {
-    console.log('im here');
-    analysisRequest(txt);
-});
+openButton.addEventListener('click', (e) => {
+    window.open(
+        chrome.extension.getURL("popup.html"),
+        "check writen by AI",
+        "width=400,height=400"
+    );
+    window.close();
+})
