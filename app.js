@@ -1,4 +1,6 @@
 const textbox = document.querySelector('#textFiled');
+const openButton = document.querySelector('#window-open');
+
 let last_submit = null;
 
 textbox.oninput = () => {
@@ -34,7 +36,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 openButton.addEventListener('click', (e) => {
     chrome.windows.create({
         url: chrome.runtime.getURL("popup.html"),
-        type: "popup"
-    })
-    window.close();
+        type: "popup",
+        height: 534,
+        width: 524
+    });
 })

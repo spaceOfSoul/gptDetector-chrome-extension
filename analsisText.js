@@ -2,8 +2,6 @@ const bar = document.querySelector('.fill-bar');
 const message = document.querySelector('#message');
 const percentage_txt = document.querySelector('#percentage');
 
-const openButton = document.querySelector('#window-open');
-
 function analysisRequest(txt) {
     const req = new XMLHttpRequest();
     req.open('GET', "https://openai-openai-detector.hf.space" + '/?' + txt, true);

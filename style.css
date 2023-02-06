@@ -28,3 +28,9 @@
     width: 200px;
     height: 100px;
 }
+
+.judgeText {
+    height: 200px;
+    width: 500px;
+    background-color: #d1cece;
+}
