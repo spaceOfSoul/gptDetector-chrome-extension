@@ -1,5 +1,3 @@
-let popupWindow = null;
-
 document.addEventListener("click", function(event) {
     chrome.runtime.sendMessage({ 'preText': event.target.innerText });
 });
