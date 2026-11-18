@@ -1,3 +1,5 @@
+import { analysisRequest, update_graph, bar, preloadModel } from './analsisText.js';
+
 const textbox = document.querySelector('#textFiled');
 const openButton = document.querySelector('#window-open');
 
@@ -16,16 +18,15 @@ textbox.oninput = () => {
             update_graph(null);
             return;
         }
-        //서버에 리퀘스트
+        //로컬 모델로 분석
         analysisRequest(textbox.value);
     }, 1000);
 
 };
 
-window.addEventListener('DOMContentLoaded', () => {
-    bar.style.width = "50%";
-    textbox.focus();
-});
+bar.style.width = "50%";
+textbox.focus();
+preloadModel();
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     console.log(request);
     if (request.preText === null) return;
