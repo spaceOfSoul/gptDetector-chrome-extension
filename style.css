@@ -1,36 +1,109 @@
-.progress-field {
+* {
+    box-sizing: border-box;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+body {
+    margin: 0;
+    padding: 14px 16px;
+    font-family: system-ui, -apple-system, "Segoe UI", "Malgun Gothic", sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #222;
+}
+
+/* 확장 아이콘 팝업 (index.html) */
+.page-main {
+    width: 360px;
+}
+
+/* 별도 창 (popup.html, 524x534) */
+.page-window {
     width: 100%;
-    height: 30px;
-    background-color: #dedede;
-    font-weight: 600;
-    font-size: .8rem;
 }
 
-.progress-field .fill-bar {
-    /* width: 72%; */
-    height: 30px;
-    padding: 0;
-    text-align: center;
-    background-color: #4F98FF;
-    color: #111;
+h1 {
+    margin: 0 0 2px;
+    font-size: 20px;
 }
 
-.footnote {
-    float: footnote;
-    font-size: 5px;
-    color: rgba(0, 0, 0, 0.8);
-    margin-bottom: 2mm;
+h2 {
+    margin: 0 0 10px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #555;
+}
+
+p {
+    margin: 8px 0 6px;
+}
+
+hr {
+    margin: 12px 0;
+    border: none;
+    border-top: 1px solid #ddd;
 }
 
 #textFiled {
-    line-height: 1.6;
-    text-align: top;
-    width: 200px;
-    height: 100px;
+    display: block;
+    width: 100%;
+    height: 110px;
+    padding: 6px 8px;
+    font: inherit;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+#window-open {
+    width: 100%;
+    padding: 6px 0;
 }
 
 .judgeText {
-    height: 200px;
-    width: 500px;
-    background-color: #d1cece;
+    width: 100%;
+    height: 45vh;
+    min-height: 180px;
+    padding: 8px 10px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    background-color: #ececec;
+    border-radius: 4px;
+}
+
+.progress-field {
+    width: 100%;
+    height: 20px;
+    overflow: hidden;
+    background-color: #dedede;
+    border-radius: 4px;
+}
+
+.progress-field .fill-bar {
+    width: 50%;
+    height: 100%;
+    background-color: #4F98FF;
+    transition: width .3s ease;
+}
+
+#percentage {
+    margin: 6px 0 0;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+}
+
+#message {
+    min-height: 1.5em;
+    margin: 2px 0 0;
+    text-align: center;
+}
+
+.footnote {
+    margin-top: 10px;
+    font-size: 11px;
+    color: #888;
 }

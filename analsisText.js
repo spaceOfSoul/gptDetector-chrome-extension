@@ -14,18 +14,22 @@ env.backends.onnx.wasm.numThreads = 1;
 export const bar = document.querySelector('.fill-bar');
 const message = document.querySelector('#message');
 const percentage_txt = document.querySelector('#percentage');
+const footnote = document.querySelector('.footnote');
 
 let classifierPromise = null;
 let latestRequestId = 0;
+let modelLoading = false;
+let analyzing = false;
 
 function getClassifier() {
     if (!classifierPromise) {
         const progress = {};
+        modelLoading = true;
         classifierPromise = pipeline('text-classification', MODEL_ID, {
             dtype: 'q8', // onnx/model_quantized.onnx (~126MB)
             device: 'wasm',
             progress_callback: (p) => {
-                if (p.status !== 'progress' || !p.total) return;
+                if (!modelLoading || p.status !== 'progress' || !p.total) return;
                 progress[p.file] = p;
                 let loaded = 0, total = 0;
                 for (const f of Object.values(progress)) {
@@ -34,7 +38,16 @@ function getClassifier() {
                 }
                 message.innerText = `Downloading model... ${(loaded / total * 100).toFixed(0)}% (first run only)`;
             },
+        }).then((classifier) => {
+            // 로딩이 끝나면 다운로드 문구와 하단 설명을 숨긴다.
+            modelLoading = false;
+            if (footnote) footnote.hidden = true;
+            if (message.innerText.startsWith('Downloading model')) {
+                message.innerText = analyzing ? 'Analyzing...' : '';
+            }
+            return classifier;
         }).catch((err) => {
+            modelLoading = false;
             classifierPromise = null; // 다음 요청에서 다시 시도
             throw err;
         });
@@ -49,11 +62,13 @@ export function preloadModel() {
 
 export async function analysisRequest(txt) {
     const requestId = ++latestRequestId;
+    analyzing = true;
     message.innerText = 'Analyzing...';
     try {
         const classifier = await getClassifier();
         const output = await classifier(txt, { top_k: null });
         if (requestId !== latestRequestId) return; // 더 최신 요청이 있으면 무시
+        analyzing = false;
         const fake = output.find((o) => o.label === 'Fake');
         const result = { fake_probability: fake ? fake.score : 0 };
         console.log(output);
@@ -61,6 +76,7 @@ export async function analysisRequest(txt) {
     } catch (err) {
         console.error(err);
         if (requestId !== latestRequestId) return;
+        analyzing = false;
         message.innerText = `Error: ${err.message ?? err}`;
     }
 }
@@ -68,8 +84,9 @@ export async function analysisRequest(txt) {
 export function update_graph(result) {
     if (result === null) {
         latestRequestId++; // 진행 중인 분석 결과 무시
+        analyzing = false;
         bar.style.width = '50%';
-        message.innerText = 'hmm...';
+        message.innerText = modelLoading ? message.innerText : 'hmm...';
         percentage_txt.innerText = '50%';
     } else {
         const fake_probability = result.fake_probability;
